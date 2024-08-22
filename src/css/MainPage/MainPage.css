@@ -1,0 +1,11 @@
+.partition {
+    background-image: url("../../assets/Mainpage-background.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    height: 30vh;
+    filter: blur(8px);
+}
+
+.content {
+    position: relative;
+}
