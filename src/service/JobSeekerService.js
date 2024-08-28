@@ -1,29 +1,28 @@
 import axios from "axios";
 
+// Base URL for the API, replace with your domain
+const API_BASE_URL = "http://jobnexus"; // or https://jobnexus if using HTTPS
+
 class JobSeekerService {
 
-    authenticateJobSeeker(credentials)
-    {
-        return axios.post("http://localhost:8080/jobseeker/authenticate", credentials)
+    authenticateJobSeeker(credentials) {
+        return axios.post(`${API_BASE_URL}/jobseeker/authenticate`, credentials);
     }
 
-    loadUserByJwtToken(jwtToken)
-    {
-        return axios.get("http://localhost:8080/jobseeker",{
-            headers:{
+    loadUserByJwtToken(jwtToken) {
+        return axios.get(`${API_BASE_URL}/jobseeker`, {
+            headers: {
                 "Authorization": "Bearer " + jwtToken,
             }
-        })
+        });
     }
 
-    registerJobSeeker(jobseeker)
-    {
-        return axios.post("http://localhost:8080/jobseeker", jobseeker);
+    registerJobSeeker(jobseeker) {
+        return axios.post(`${API_BASE_URL}/jobseeker`, jobseeker);
     }
 
-    uploadJobSeekerFiles(id,data)
-    {
-        return axios.post("http://localhost:8080/jobseeker/files/"+id,data);
+    uploadJobSeekerFiles(id, data) {
+        return axios.post(`${API_BASE_URL}/jobseeker/files/${id}`, data);
     }
 
 }
