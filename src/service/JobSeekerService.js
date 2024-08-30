@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for the API, replace with your domain
-const API_BASE_URL = "http://jobnexus"; // or https://jobnexus if using HTTPS
+const API_BASE_URL = "https://jobnexus.in"; // or https://jobnexus if using HTTPS
 
 class JobSeekerService {
 
