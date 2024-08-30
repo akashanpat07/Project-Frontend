@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { setRecruiterDetails } from "../redux/slices/Recruiter/RecruiterSlice";
 
 // Base URL for the API, replace with your domain
-const API_BASE_URL = "https://jobnexus.in"; // or https://jobnexus if using HTTPS
+const API_BASE_URL = "https://www.jobnexus.in"; // or https://jobnexus if using HTTPS
 
 class RecruiterService {
 
