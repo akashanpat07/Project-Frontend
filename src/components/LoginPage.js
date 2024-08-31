@@ -1,13 +1,11 @@
-import '../css/LoginPage.css'
-import sideImage from "../assets/loginSide.svg"
+import '../css/LoginPage.css';
+import sideImage from "../assets/loginSide.svg";
 import React, { useEffect, useState } from 'react';
 import ScrollReveal from 'scrollreveal';
 import { useDispatch } from 'react-redux';
-import axios from 'axios';
 import { useNavigate } from 'react-router';
-import { setRecruiterDetails } from '../redux/slices/Recruiter/RecruiterSlice';
-import RecruiterService from '../service/RecruiterService';
 import { toast } from 'react-toastify';
+import RecruiterService from '../service/RecruiterService';
 import JobSeekerService from '../service/JobSeekerService';
 
 const LoginPage = () => {
@@ -42,13 +40,14 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("email", user.email);
     formData.append("password", user.password);
 
     // Jobseeker
     if (user.roleType === "JobSeeker") {
-      JobSeekerService.authenticateJobSeeker(user)
+      JobSeekerService.authenticateJobSeeker(formData)
         .then((response) => {
           const jwtToken = response.data.jwtToken;
           storeToken("JOBSEEKER", jwtToken);
@@ -81,11 +80,6 @@ const LoginPage = () => {
           }
         });
     }
-
-    // Admin -> Optional
-    else if (user.roleType === "Admin") {
-      // Handle Admin login if needed
-    }
   };
 
   return (
@@ -95,7 +89,7 @@ const LoginPage = () => {
         <div className="col-sm-12 col-md-6 col-lg-6 mb-5 left">
           <img
             src={sideImage}
-            alt=""
+            alt="Side Image"
             className="img-fluid login-side-image"
           />
         </div>
@@ -142,7 +136,6 @@ const LoginPage = () => {
                 >
                   <option value="JobSeeker">JobSeeker</option>
                   <option value="Recruiter">Recruiter</option>
-                  {/* <option value="Admin">Admin</option> */}
                 </select>
               </div>
               {/* Login Button */}
