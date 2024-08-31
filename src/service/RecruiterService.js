@@ -2,8 +2,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setRecruiterDetails } from "../redux/slices/Recruiter/RecruiterSlice";
 
-// Base URL for the API, replace with your domain
-const API_BASE_URL = "https://www.jobnexus.in"; // or https://jobnexus if using HTTPS
+// Automatically use the current protocol (HTTP or HTTPS)
+const API_BASE_URL = `${window.location.protocol}//www.jobnexus.in`;
 
 class RecruiterService {
 
