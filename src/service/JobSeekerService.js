@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Automatically use the current protocol (HTTP or HTTPS)
-const API_BASE_URL = `https://jobnexus.vercel.app`;
+const API_BASE_URL = `https://www.jobnexus.in`;
 
 class JobSeekerService {
 
