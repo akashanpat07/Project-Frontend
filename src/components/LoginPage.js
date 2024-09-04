@@ -1,21 +1,30 @@
-import '../css/LoginPage.css';
-import sideImage from "../assets/loginSide.svg";
+import '../css/LoginPage.css'
+import sideImage from "../assets/loginSide.svg"
 import React, { useEffect, useState } from 'react';
 import ScrollReveal from 'scrollreveal';
 import { useDispatch } from 'react-redux';
+import axios, { HttpStatusCode } from 'axios';
+import { error } from 'jquery';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
+import { setRecruiterDetails } from '../redux/slices/Recruiter/RecruiterSlice';
 import RecruiterService from '../service/RecruiterService';
+import { toast } from 'react-toastify';
 import JobSeekerService from '../service/JobSeekerService';
 
-const LoginPage = () => {
-  useEffect(() => {
-    const sr = ScrollReveal();
-    sr.reveal(".left", { origin: "left", duration: 1500, distance: "200px" });
-    sr.reveal(".emerge", { scale: 0.7, duration: 1500 });
 
-    return () => sr.destroy(); // Cleanup on unmount
-  }, []);
+const LoginPage = () => {
+
+  useEffect(() => {
+    ScrollReveal().reveal(".left", {
+      origin: "left",
+      duration: 1500,
+      distance: "200px",
+    });
+    ScrollReveal().reveal(".emerge", {
+      scale: 0.7,
+      duration: 1500,
+    });
+  });
 
   const [user, setUser] = useState({
     email: "",
@@ -33,65 +42,82 @@ const LoginPage = () => {
     });
   };
 
-  const storeToken = (holder, token) => {
-    const jwtTokenDetails = { holder, jwtToken: token };
-    localStorage.setItem("jwt-token", JSON.stringify(jwtTokenDetails));
-  };
-
+  // To handle Login Event
   const handleLogin = (e) => {
     e.preventDefault();
-
+    // Sent to the Reducer where state is changed
+    console.log(user)
     const formData = new FormData();
     formData.append("email", user.email);
     formData.append("password", user.password);
 
-    // Jobseeker
+    //Jobseeker
     if (user.roleType === "JobSeeker") {
-      JobSeekerService.authenticateJobSeeker(formData)
+      JobSeekerService.authenticateJobSeeker(user)
         .then((response) => {
-          const jwtToken = response.data.jwtToken;
-          storeToken("JOBSEEKER", jwtToken);
-          toast.success("Successfully authenticated!");
-          navigate("/");
-        })
-        .catch((error) => {
-          if (error.response) {
-            toast.error(error.response.data.message || "Something went wrong");
-          } else {
-            toast.error("Network error");
+          var jwtToken = response.data.jwtToken
+          //Storing JWT as a object
+          var jwtTokenDetails = {
+            holder: "JOBSEEKER",
+            jwtToken: jwtToken
           }
-        });
+          localStorage.setItem("jwt-token", JSON.stringify(jwtTokenDetails));
+          toast.success("Successfully authenticated!");
+          navigate("/")
+        }).catch((error) => {
+          console.log(error)
+          if (error.code == "ERR_NETWORK")
+            toast.error("Server Busy");
+          else {
+            toast.error("Invalid credentials")
+          }
+        })
     }
 
-    // Recruiter
+    //Recruiter
     else if (user.roleType === "Recruiter") {
+      //Fetching JWT Token
       RecruiterService.authenticateRecruiter(formData)
         .then((response) => {
-          const jwtToken = response.data.jwtToken;
-          storeToken("RECRUITER", jwtToken);
-          toast.success("Successfully authenticated!");
-          navigate("/dashboard");
-        })
-        .catch((error) => {
-          if (error.response) {
-            toast.error(error.response.data.message || "Something went wrong");
-          } else {
-            toast.error("Network error");
+          var jwtToken = response.data.jwtToken
+          //Storing JWT as a object
+          var jwtTokenDetails = {
+            holder: "RECRUITER",
+            jwtToken: jwtToken
           }
-        });
+          //Storing JWT in localstorage
+          localStorage.setItem("jwt-token", JSON.stringify(jwtTokenDetails));
+          toast.success("Successfully authenticated!");
+          navigate("/dashboard")  
+        }).catch((error) => {
+          console.log(error)
+          if (error.code == "ERR_NETWORK")
+            toast.error("Server Busy");
+          else {
+            toast.error("Invalid credentials")
+          }
+        })
+    }
+	
+	
+
+    //Admin -> Optional
+    else if (user.roleType === "Admin") {
+
     }
   };
 
   return (
     <div className="container mt-5 mb-5 p-4">
       <div className="row">
+
         {/* Left Side Image */}
         <div className="col-sm-12 col-md-6 col-lg-6 mb-5 left">
           <img
             src={sideImage}
-            alt="Side Image"
+            alt=""
             className="img-fluid login-side-image"
-          />
+          ></img>
         </div>
 
         {/* Right Side Form */}
@@ -124,9 +150,16 @@ const LoginPage = () => {
                   required
                 />
               </div>
+              {/* Keep me Signed in */}
+              {/* <div className="form-group checkbox">
+                <input type="checkbox" id="keepSignedIn" name="keepSignedIn" />
+                <label htmlFor="keepSignedIn">Keep me signed in</label>
+              </div> */}
               {/* Role Type */}
               <div className="mb-4 text-start">
-                <label htmlFor="roleType" className="text-muted">Who are you?</label>
+                <label htmlFor="roleType" className="text-muted">
+                  Who are you?
+                </label>
                 <select
                   className="form-select mt-1"
                   name="roleType"
@@ -134,17 +167,19 @@ const LoginPage = () => {
                   value={user.roleType}
                   onChange={handleChange}
                 >
-                  <option value="JobSeeker">JobSeeker</option>
-                  <option value="Recruiter">Recruiter</option>
+                  <option name="jobseeker">JobSeeker</option>
+                  <option name="recruiter">Recruiter</option>
+                  {/* <option name="admin">Admin</option> */}
                 </select>
               </div>
               {/* Login Button */}
-              <button type="submit" className="btn btn-outline-success">
+              <button type="submit" className="btn btn-outline-success" >
                 Log Me In
               </button>
             </form>
           </div>
         </div>
+
       </div>
     </div>
   );
