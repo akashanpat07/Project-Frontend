@@ -4,12 +4,12 @@ class JobSeekerService {
 
     authenticateJobSeeker(credentials)
     {
-        return axios.post("https://www.jobnexus.in/jobseeker/authenticate", credentials)
+        return axios.post("https://api.jobnexus.in/jobseeker/authenticate", credentials)
     }
 
     loadUserByJwtToken(jwtToken)
     {
-        return axios.get("https://www.jobnexus.in/jobseeker",{
+        return axios.get("https://api.jobnexus.in/jobseeker",{
             headers:{
                 "Authorization": "Bearer " + jwtToken,
             }
@@ -18,12 +18,12 @@ class JobSeekerService {
 
     registerJobSeeker(jobseeker)
     {
-        return axios.post("https://www.jobnexus.in/jobseeker", jobseeker);
+        return axios.post("https://api.jobnexus.in/jobseeker", jobseeker);
     }
 
     uploadJobSeekerFiles(id,data)
     {
-        return axios.post("https://www.jobnexus.in/jobseeker/files/"+id,data);
+        return axios.post("https://api.jobnexus.in/jobseeker/files/"+id,data);
     }
 
 }
