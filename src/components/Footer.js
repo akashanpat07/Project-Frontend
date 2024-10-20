@@ -5,7 +5,7 @@ export default function Footer() {
     return (
         <footer className="footer">
             <div className="footer-content">
-                <h2 className="footer-title">JobNexus</h2>
+                <h2 className="footer-title">JobNexus  By Akash Anpat</h2>
                 <div className="footer-details">
                     <div className="footer-item">
                         <i className="fa fa-map-marker"></i>
